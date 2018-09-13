@@ -14,6 +14,20 @@ def breakexit(foo):
 	if stuff == 'x' or stuff == 'q':
 		sys.exit("bye")
 
+"""
+	Calculate the leading eigenvalue and its corresponding eigenvector (normalized),
+	using power method.
+	Parameters
+	----------
+	matrix: 2D numpy array. 
+		Assumed to be positive semi-definite.
+	n: int
+		size of the square matrix
+	Returns
+	-------
+	eigenvalue: float
+	eigenvector: np array. normalized so that L2 norm = 1.0
+"""
 def runpower_one(matrix, n):
 	#get initial vector
 	v = np.zeros(n)
@@ -38,6 +52,20 @@ def runpower_one(matrix, n):
 		oldnormw = normw
 	return normw, v
  
+"""
+	Returns the leading eigenvalue and its corresponding eigenvector (normalized),
+	using the power method described in extracredit#2.
+	Parameters
+	----------
+	matrix: 2D numpy array. 
+		Assumed to be positive semi-definite.
+	n: int
+		size of the square matrix
+	Returns
+	-------
+	eigenvalue: float
+	eigenvector: np array. normalized so that L2 norm = 1.0
+"""
 def runpower_one_extracredit(matrix, n, k=32):
 	m = matrix
 	log2k = math.log2(k) 
@@ -65,8 +93,24 @@ def runpower_one_extracredit(matrix, n, k=32):
 	normw = (np.inner(w, w)) ** .5
 	lmbda = normw #* normalize_factor
 	return lmbda, w / normw
-	
-def runpower(matrix, n):
+
+"""
+	Returns all the eigenvalues such that they are no smaller than a specific 
+	fraction (specified by 'tolerance') than the leading eigenvalue.
+	Calculation of eigenvalues is done using power method.
+	Parameters
+	----------
+	matrix: 2D numpy array. 
+		Assumed to be positive semi-definite.
+	n: int
+		size of the square matrix
+	tolerance: float
+		the tolerance e.g. 0.01
+	Returns
+	-------
+	list of eigenvalues in decreasing order
+"""
+def runpower(matrix, n, tolerance):
 	calculate_next = True
 	eigenvalue_list = []
 	while(calculate_next):	
@@ -80,7 +124,23 @@ def runpower(matrix, n):
 			matrix = matrix - new_eigenvalue * np.outer(v,v)
 	return eigenvalue_list
 
-def runpower_extracredit(matrix, n):
+"""
+	Returns all the eigenvalues such that they are no smaller than a specific 
+	fraction (specified by 'tolerance') than the leading eigenvalue.
+	Calculation of eigenvalues is done using power method specified in extracredit #2.
+	Parameters
+	----------
+	matrix: 2D numpy array. 
+		Assumed to be positive semi-definite.
+	n: int
+		size of the square matrix
+	tolerance: float
+		the tolerance e.g. 0.01
+	Returns
+	-------
+	list of eigenvalues in decreasing order
+"""
+def runpower_extracredit(matrix, n, tolerance):
 	calculate_next = True
 	eigenvalue_list = []
 	while(calculate_next):	
@@ -140,7 +200,7 @@ if __name__ == "__main__":
 	print("Running power method...")
 
 	start = time.clock()
-	eigenvalue_list = runpower(matrix, n)
+	eigenvalue_list = runpower(matrix, n, tolerance)
 	end = time.clock()
 	
 	print("Power method takes ",end-start, " seconds.")
@@ -148,6 +208,7 @@ if __name__ == "__main__":
 	print("Now running power method using the \'power of 2\' version, \
 		where k = 32.")
 	
-	eigenvalue_list_extracredit = runpower_extracredit(matrix, n)
+	start = time.clock()
+	eigenvalue_list_extracredit = runpower_extracredit(matrix, n, tolerance)
 	end = time.clock()
 	print("New power method takes ",end-start, " seconds.")
