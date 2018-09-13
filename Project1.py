@@ -65,7 +65,35 @@ def runpower_one_extracredit(matrix, n, k=32):
 	normw = (np.inner(w, w)) ** .5
 	lmbda = normw #* normalize_factor
 	return lmbda, w / normw
+	
+def runpower(matrix, n):
+	calculate_next = True
+	eigenvalue_list = []
+	while(calculate_next):	
+		new_eigenvalue, v = runpower_one(matrix, n)
+		if len(eigenvalue_list) == 0:
+			leading_eigenvalue = new_eigenvalue
+		eigenvalue_list.append(new_eigenvalue)
+		if abs(1.0 * new_eigenvalue / leading_eigenvalue) < tolerance:
+			calculate_next = False
+		else:
+			matrix = matrix - new_eigenvalue * np.outer(v,v)
+	return eigenvalue_list
 
+def runpower_extracredit(matrix, n):
+	calculate_next = True
+	eigenvalue_list = []
+	while(calculate_next):	
+		new_eigenvalue, v = runpower_one_extracredit(matrix, n)
+		if len(eigenvalue_list) == 0:
+			leading_eigenvalue = new_eigenvalue
+		eigenvalue_list.append(new_eigenvalue)
+		if abs(1.0 * new_eigenvalue / leading_eigenvalue) < tolerance:
+			calculate_next = False
+		else:
+			matrix = matrix - new_eigenvalue * np.outer(v,v)
+	return eigenvalue_list	
+	
 if __name__ == "__main__":
 	if len(sys.argv) != 3:  # the program name and the datafile
 		# stop the program and print an error message
@@ -110,20 +138,9 @@ if __name__ == "__main__":
 	
 	breakexit('run algo?')
 	print("Running power method...")
-	calculate_next = True
-	eigen_list = []
+
 	start = time.clock()
-	m = matrix
-	while(calculate_next):	
-		new_eigenvalue, v = runpower_one(m, n)
-		if len(eigen_list) == 0:
-			leading_eigenvalue = new_eigenvalue
-		eigen_list.append(new_eigenvalue)
-		if abs(1.0 * new_eigenvalue / leading_eigenvalue) < tolerance:
-			calculate_next = False
-		else:
-			m = m - new_eigenvalue * np.outer(v,v)
-	
+	eigenvalue_list = runpower(matrix, n)
 	end = time.clock()
 	
 	print("Power method takes ",end-start, " seconds.")
@@ -131,19 +148,6 @@ if __name__ == "__main__":
 	print("Now running power method using the \'power of 2\' version, \
 		where k = 32.")
 	
-	calculate_next = True
-	eigen_list = []
-	start = time.clock()
-	m = matrix
-	while(calculate_next):	
-		new_eigenvalue, v = runpower_one_extracredit(m, n)
-		if len(eigen_list) == 0:
-			leading_eigenvalue = new_eigenvalue
-		eigen_list.append(new_eigenvalue)
-		if abs(1.0 * new_eigenvalue / leading_eigenvalue) < tolerance:
-			calculate_next = False
-		else:
-			m = m - new_eigenvalue * np.outer(v,v)
-	
+	eigenvalue_list_extracredit = runpower_extracredit(matrix, n)
 	end = time.clock()
 	print("New power method takes ",end-start, " seconds.")
