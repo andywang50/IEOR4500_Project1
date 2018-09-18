@@ -156,3 +156,4 @@ if __name__ == "__main__":
 	
 	print("Power method takes ",end-start, " seconds.")
 
+ 
