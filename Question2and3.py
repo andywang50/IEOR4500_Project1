@@ -5,6 +5,7 @@ Created on Thu Sep 13 11:20:23 2018
 Note: the following code is written in Python 3.5.2 not Python 2.7
 """
 import math
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import sys
@@ -65,11 +66,13 @@ def runpower_one(matrix, n):
 		size of the square matrix
 	tolerance: float
 		the tolerance e.g. 0.01
+	max_num: int
+		maximum number of eigenvalues to return, default=None
 	Returns
 	-------
 	list of eigenvalues in decreasing order
 """
-def runpower(matrix, n, tolerance):
+def runpower(matrix, n, tolerance, max_num=None):
 	calculate_next = True
 	eigenvalue_list = []
 	while(calculate_next):	
@@ -77,6 +80,8 @@ def runpower(matrix, n, tolerance):
 		if len(eigenvalue_list) == 0:
 			leading_eigenvalue = new_eigenvalue
 		eigenvalue_list.append(new_eigenvalue)
+		if max_num is not None and len(eigenvalue_list) == max_num:
+			break
 		if abs(1.0 * new_eigenvalue / leading_eigenvalue) < tolerance:
 			calculate_next = False
 		else:
@@ -133,6 +138,8 @@ if __name__ == "__main__":
 	matrix = np.exp(matrix_log_df)
 	ret_matrix = matrix.shift(-1, axis=1) / matrix - 1
 	ret_matrix = ret_matrix.dropna(axis=1)
+	ret_mean = ret_matrix.mean(axis=1)
+	ret_matrix = ret_matrix.sub(ret_mean, axis=0)
 	
 	breakexit('compute covariance matrix?')
 	print("Computing covariance matrix...")
