@@ -16,20 +16,20 @@ def breakexit(foo):
 
 
 def runpower_one(matrix, n):
-    """
-        Calculate the leading eigenvalue and its corresponding eigenvector (normalized),
-        using power method.
-        Parameters
-        ----------
-        matrix: 2D numpy array.
-        Assumed to be positive semi-definite.
-        n: int
-        size of the square matrix
-        Returns
-        -------
-        eigenvalue: float
-        eigenvector: np array. normalized so that L2 norm = 1.0
-    """
+	"""
+	Calculate the leading eigenvalue and its corresponding eigenvector (normalized),
+	using power method.
+	Parameters
+	----------
+	matrix: 2D numpy array.
+	Assumed to be positive semi-definite.
+	n: int
+	size of the square matrix
+	Returns
+	-------
+	eigenvalue: float
+	eigenvector: np array. normalized so that L2 norm = 1.0
+	"""
 	#get initial vector
 	v = np.zeros(n)
 	w = np.zeros(n)
@@ -54,20 +54,20 @@ def runpower_one(matrix, n):
 	return normw, v
  
 def runpower_one_extracredit(matrix, n, k=32):
-    """
-        Returns the leading eigenvalue and its corresponding eigenvector (normalized),
-        using the power method described in extracredit#2.
-        Parameters
-        ----------
-        matrix: 2D numpy array.
-        Assumed to be positive semi-definite.
-        n: int
-        size of the square matrix
-        Returns
-        -------
-        eigenvalue: float
-        eigenvector: np array. normalized so that L2 norm = 1.0
-    """
+	"""
+	Returns the leading eigenvalue and its corresponding eigenvector (normalized),
+	using the power method described in extracredit#2.
+	Parameters
+	----------
+	matrix: 2D numpy array.
+	Assumed to be positive semi-definite.
+	n: int
+	size of the square matrix
+	Returns
+	-------
+	eigenvalue: float
+	eigenvector: np array. normalized so that L2 norm = 1.0
+	"""
 
 	m = matrix
 	log2k = math.log2(k) 
@@ -98,22 +98,22 @@ def runpower_one_extracredit(matrix, n, k=32):
 
 
 def runpower(matrix, n, tolerance):
-    """
-    Returns all the eigenvalues such that they are no smaller than a specific
-    fraction (specified by 'tolerance') than the leading eigenvalue.
-    Calculation of eigenvalues is done using power method.
-    Parameters
-    ----------
-    matrix: 2D numpy array.
-    Assumed to be positive semi-definite.
-    n: int
-    size of the square matrix
-    tolerance: float
-    the tolerance e.g. 0.01
-    Returns
-    -------
-    list of eigenvalues in decreasing order
-    """
+	"""
+	Returns all the eigenvalues such that they are no smaller than a specific
+	fraction (specified by 'tolerance') than the leading eigenvalue.
+	Calculation of eigenvalues is done using power method.
+	Parameters
+	----------
+	matrix: 2D numpy array.
+	Assumed to be positive semi-definite.
+	n: int
+	size of the square matrix
+	tolerance: float
+	the tolerance e.g. 0.01
+	Returns
+	-------
+	list of eigenvalues in decreasing order
+	"""
 	calculate_next = True
 	eigenvalue_list = []
 	while(calculate_next):	
@@ -129,22 +129,22 @@ def runpower(matrix, n, tolerance):
 
 
 def runpower_extracredit(matrix, n, tolerance):
-    """
-        Returns all the eigenvalues such that they are no smaller than a specific
-        fraction (specified by 'tolerance') than the leading eigenvalue.
-        Calculation of eigenvalues is done using power method specified in extracredit #2.
-        Parameters
-        ----------
-        matrix: 2D numpy array.
-        Assumed to be positive semi-definite.
-        n: int
-        size of the square matrix
-        tolerance: float
-        the tolerance e.g. 0.01
-        Returns
-        -------
-        list of eigenvalues in decreasing order
-    """
+	"""
+	Returns all the eigenvalues such that they are no smaller than a specific
+	fraction (specified by 'tolerance') than the leading eigenvalue.
+	Calculation of eigenvalues is done using power method specified in extracredit #2.
+	Parameters
+	----------
+	matrix: 2D numpy array.
+	Assumed to be positive semi-definite.
+	n: int
+	size of the square matrix
+	tolerance: float
+	the tolerance e.g. 0.01
+	Returns
+	-------
+	list of eigenvalues in decreasing order
+	"""
 	calculate_next = True
 	eigenvalue_list = []
 	while(calculate_next):	
