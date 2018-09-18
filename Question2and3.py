@@ -16,7 +16,9 @@ def breakexit(foo):
 	if stuff == 'x' or stuff == 'q':
 		sys.exit("bye")
 
-"""
+
+def runpower_one(matrix, n):
+	"""
 	Calculate the leading eigenvalue and its corresponding eigenvector (normalized),
 	using power method.
 	Parameters
@@ -29,8 +31,7 @@ def breakexit(foo):
 	-------
 	eigenvalue: float
 	eigenvector: np array. normalized so that L2 norm = 1.0
-"""
-def runpower_one(matrix, n):
+	"""
 	#get initial vector
 	v = np.zeros(n)
 	w = np.zeros(n)
@@ -39,7 +40,7 @@ def runpower_one(matrix, n):
 	#print 'matrix', matrix
 	#print 'v', v
 	T = 10000 #number of iterations
-	tolerance = 1e-06
+	tol = 1e-06
 	oldnormw = 0
 	for t in range(T):
 		w = matrix.dot(v)
@@ -48,13 +49,15 @@ def runpower_one(matrix, n):
 		v = w/normw
 		#print 't',t,'v',v
 		#print 't',t,'normw',normw, 'old', oldnormw
-		if np.abs(normw - oldnormw)/normw < tolerance:
+		if np.abs(normw - oldnormw)/normw < tol:
 			#print ' breaking'
 			break
 		oldnormw = normw
 	return normw, v
  
-"""
+
+def runpower(matrix, n, tolerance, max_num=None):
+	"""
 	Returns all the eigenvalues such that they are no smaller than a specific 
 	fraction (specified by 'tolerance') than the leading eigenvalue.
 	Calculation of eigenvalues is done using power method.
@@ -71,8 +74,7 @@ def runpower_one(matrix, n):
 	Returns
 	-------
 	list of eigenvalues in decreasing order
-"""
-def runpower(matrix, n, tolerance, max_num=None):
+	"""
 	calculate_next = True
 	eigenvalue_list = []
 	while(calculate_next):	
