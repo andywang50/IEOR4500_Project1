@@ -225,7 +225,9 @@ if __name__ == "__main__":
 		evector_current[:num_evalues,:] = tmp_evectors
 		evector_change = evector_current - evector_prev
 		evector_change_norm = np.linalg.norm(evector_change, 2, axis=1)
-		evector_change_df.iloc[t, :num_evalues_toshow] = evector_change_norm
+		evector_change2 = evector_current + evector_prev
+		evector_change_norm2 = np.linalg.norm(evector_change2, 2, axis=1)
+		evector_change_df.iloc[t, :num_evalues_toshow] = np.min([evector_change_norm,evector_change_norm2],axis=0)
 		evector_prev = evector_current
 		
 	eigenvalues_df.plot()
