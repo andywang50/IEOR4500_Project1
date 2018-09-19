@@ -232,6 +232,10 @@ if __name__ == "__main__":
 	plt.title("Top " + str(num_evalues_toshow) + " eigenvectors over time")
 	plt.savefig("eigenvalues.png")
 	plt.show()
+	eigenvalues_df.iloc[100:,].plot()
+	plt.title("Top " + str(num_evalues_toshow) + " eigenvectors over time (zoom)")
+	plt.savefig("eigenvalues_zoom.png")
+	plt.show()
 	for col in evector_change_df.columns:
 		evector_change_df.loc[:,col].plot()
 		plt.title("Change of the calculated" + col + " eigenvector (in L2 norm) over time")
