@@ -12,7 +12,7 @@ import sys
 
 import time
 
-ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(n/10%10!=1)*(n%10<4)*n%10::4])
+ordinal = lambda n: "%d%s" % (n,"tsnrhtdd"[(math.floor(n/10)%10!=1)*(n%10<4)*n%10::4])
 
 
 def fill_missing(matrix_raw, method='simple', window_size=5):
