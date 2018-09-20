@@ -108,9 +108,10 @@ def runpower(matrix, n, tolerance, max_num=None, return_vector=False):
 	calculate_next = True
 	eigenvalue_list = []
 	eigenvector_list = []
+	leading_eigenvalue = np.nan
 	while(calculate_next):	
 		new_eigenvalue, v = runpower_one(matrix, n)
-		if len(eigenvalue_list) == 0:
+		if np.isnan(leading_eigenvalue):
 			leading_eigenvalue = new_eigenvalue
 		eigenvalue_list.append(new_eigenvalue)
 		eigenvector_list.append(v)
