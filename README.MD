@@ -25,4 +25,6 @@ Question2and3.py (in progress)
         How to visualize? Plot the evolutions of the 5 leading eigenvalues over time
         Although it seems we don't need to worry about eigenvectors (according to wikipedia, the term 'spectra' 'only refers to eigenvalues of a matrix), the code also plot the changes in eigenvectors over time in the following way.
 
-            E.g. For the 1st eigenvector v_1. compute || v_1^(t) - v_1^(t-1) || _2 (L2 norm). plot the evolution of this value over time. If the eigenvectors stalize as T gets larger, we would expect the change decays to 0. (Although it seems not to be the case for 2nd, 3rd... eigenvectors). 
+            E.g. For the 1st eigenvector v_1. compute min(|| v_1^(t) - v_1^(t-1) ||, (||v_1^(t) + v_1^(t-1) ||.
+                
+                plot the evolution of this value over time. If the eigenvectors stalize as T gets larger, we would expect the change decays to 0. (Although it seems not to be the case for 2nd, 3rd... eigenvectors). 
