@@ -1,6 +1,6 @@
 To run:
 
-open console, go to the working directory. Then type "python Question1and4.py russell_cov.txt 0.01" and hit enter.
+open console, go to the working directory. Then type "python Question1.py russell_cov.txt 0.01" and hit enter.
 
 Note: 0.01 corresponds to the tolerance, as required by the project prompt.
 
