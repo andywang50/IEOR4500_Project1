@@ -130,7 +130,78 @@ def runpower(matrix, n, tolerance, max_num=None, return_vector=False):
 		return eigenvalue_list, np.asarray(eigenvector_list)
 	else:
 		return eigenvalue_list
+def runpower_one_extracredit(matrix, n, k=1024):
+	"""
+	Returns the leading eigenvalue and its corresponding eigenvector (normalized),
+	using the power method described in extracredit#2.
+	Parameters
+	----------
+	matrix: 2D numpy array.
+	Assumed to be positive semi-definite.
+	n: int
+	size of the square matrix
+	Returns
+	-------
+	eigenvalue: float
+	eigenvector: np array. normalized so that L2 norm = 1.0
+	"""
 
+	m = matrix
+	log2k = math.log2(k) 
+	assert log2k == int(log2k)
+	log2k = int(log2k)
+	#normalize_factor = 1.0
+	for i in range(log2k):
+		largest_entry = np.max(abs(m))
+#==============================================================================
+# 		if largest_entry > 1:
+# 			m = m / largest_entry
+# 			normalize_arr[i] = largest_entry
+#==============================================================================
+		m = m / largest_entry
+		#normalize_factor *= largest_entry ** ( 2 ** (log2k - i))
+		m = np.matmul(m, m)
+	v = np.zeros(n)
+	w = np.zeros(n)
+	for j in range(n):
+		v[j] = np.random.uniform(0,1)		
+	v = m.dot(v)
+	normv = (np.inner(v, v)) ** .5
+	v = v / normv
+	w = matrix.dot(v)
+	normw = (np.inner(w, w)) ** .5
+	lmbda = normw #* normalize_factor
+	return lmbda, w / normw
+
+def runpower_extracredit(matrix, n, tolerance, k=1024):
+	"""
+	Returns all the eigenvalues such that they are no smaller than a specific
+	fraction (specified by 'tolerance') than the leading eigenvalue.
+	Calculation of eigenvalues is done using power method specified in extracredit #2.
+	Parameters
+	----------
+	matrix: 2D numpy array.
+	Assumed to be positive semi-definite.
+	n: int
+	size of the square matrix
+	tolerance: float
+	the tolerance e.g. 0.01
+	Returns
+	-------
+	list of eigenvalues in decreasing order
+	"""
+	calculate_next = True
+	eigenvalue_list = []
+	while(calculate_next):	
+		new_eigenvalue, v = runpower_one_extracredit(matrix, n, k)
+		if len(eigenvalue_list) == 0:
+			leading_eigenvalue = new_eigenvalue
+		eigenvalue_list.append(new_eigenvalue)
+		if abs(1.0 * new_eigenvalue / leading_eigenvalue) < tolerance:
+			calculate_next = False
+		else:
+			matrix = matrix - new_eigenvalue * np.outer(v,v)
+	return eigenvalue_list	
 
 if __name__ == "__main__":
 	if len(sys.argv) != 3:  # the program name and the datafile
@@ -176,8 +247,8 @@ if __name__ == "__main__":
 			#print i, j, numberij
 			matrix_raw[i][j] = valueij
 	# missing data
-	#price_matrix = fill_missing(matrix_raw)
-	price_matrix = fill_missing(matrix_raw, method='ma')
+	price_matrix = fill_missing(matrix_raw)
+	#price_matrix = fill_missing(matrix_raw, method='ma')
 	ret_matrix = price_matrix.shift(-1, axis=1) / price_matrix - 1
 	ret_matrix = ret_matrix.dropna(axis=1)
 	ret_mean = ret_matrix.mean(axis=1)
@@ -193,8 +264,22 @@ if __name__ == "__main__":
 	start = time.clock()
 	eigenvalue_list = runpower(cov, n, tolerance)
 	end = time.clock()
-	
+	print(eigenvalue_list)
 	print("Power method takes ",end-start, " seconds.")
+
+## Question 4
+	for log2k in range(5,11):
+		k = 2 ** log2k
+		
+		#print("Now running power method using the \'power of 2\' version, \
+		#	where k = " + str(k) + ".")
+		
+		start = time.clock()
+		eigenvalue_list_extracredit = runpower_extracredit(cov, n, tolerance, k)
+		end = time.clock()
+		#print(eigenvalue_list_extracredit)
+		print("When k = ", k, " it takes ",end-start, " seconds.")
+
 
 ## Question 3
 	"""
@@ -206,6 +291,7 @@ if __name__ == "__main__":
 										columns=[ordinal(i+1) for i in range(num_evalues_toshow)])
 	evector_change_df = pd.DataFrame(np.nan, index=range(ret_matrix.shape[1]),
 										columns=[ordinal(i+1) for i in range(num_evalues_toshow)])
+	
 	evector_prev = np.zeros((num_evalues_toshow,n))	
 	for t in eigenvalues_df.index:
 		if (t+2)%10 == 0:
@@ -233,13 +319,13 @@ if __name__ == "__main__":
 	eigenvalues_df.plot()
 	plt.title("Top " + str(num_evalues_toshow) + " eigenvectors over time")
 	plt.savefig("eigenvalues.png")
-	plt.show()
+	plt.close()
 	eigenvalues_df.iloc[100:,].plot()
 	plt.title("Top " + str(num_evalues_toshow) + " eigenvectors over time (zoom)")
 	plt.savefig("eigenvalues_zoom.png")
-	plt.show()
+	plt.close()
 	for col in evector_change_df.columns:
 		evector_change_df.loc[:,col].plot()
 		plt.title("Change of the calculated" + col + " eigenvector (in L2 norm) over time")
 		plt.savefig(col+"-eigenvector.png")
-		plt.show()
+		plt.close()
