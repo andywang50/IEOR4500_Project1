@@ -108,6 +108,7 @@ if __name__ == "__main__":
 		end = time.clock()
 		#print(eigenvalue_list_extracredit)
 		print("When k = ", k, " it takes ",end-start, " seconds.")
+	evalue_diff.to_csv("differences.csv")
 	
 ## Question 3
 	"""

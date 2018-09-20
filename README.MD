@@ -4,13 +4,12 @@ open console, go to the working directory. Then type "python Question1and4.py ru
 
 Note: 0.01 corresponds to the tolerance, as required by the project prompt.
 
-Question1and4.py (pretty much done)
+Question1.py
 
 	Question1 simply reuses professor's code.
 
-	Question4 uses a default k = 32. Since n is big in our case, this runs slower than the original power method.
 
-Question2and3.py (in progress)
+Question2to4.py 
 
     Question 2
 
@@ -28,3 +27,6 @@ Question2and3.py (in progress)
             E.g. For the 1st eigenvector v_1. compute min(|| v_1^(t) - v_1^(t-1) ||, (||v_1^(t) + v_1^(t-1) ||.
                 
                 plot the evolution of this value over time. If the eigenvectors stalize as T gets larger, we would expect the change decays to 0. (Although it seems not to be the case for 2nd, 3rd... eigenvectors). 
+
+    Question4 
+        uses k = 32, 64, 128, ..., 1024. Compare these results as well as result from question 2 to the results from np.linalg.eigh() function. Will save as a csv file (differences.csv).
