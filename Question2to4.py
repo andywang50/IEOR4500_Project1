@@ -76,15 +76,21 @@ if __name__ == "__main__":
 	# numpy returns in ascending order, we prefer descending order
 	lmbda_np = lmbda_np[::-1]
 	v_np = v_np[:,::-1]
+	print("Covariance matrix:")
+	print(cov)
 	
 	breakexit('run algo?')
 	print("Running power method...")
 
 	start = time.clock()
-	eigenvalue_list = runpower(cov, n, tolerance)
+	eigenvalue_list, eigenvectors = runpower(cov, n, tolerance, return_vector = True)
 	end = time.clock()
+	print("eigenvalues: (in descending order)")
 	print(eigenvalue_list)
-	print("Power method takes ",end-start, " seconds.")
+	print('------------------------------------')
+	print('eigenvectors: in the order of corresponding eigenvalues')
+	print(eigenvectors)
+	print("Power method takes ",end-start, " seconds. (CPU time)")
 	
 	# calculate the difference between our eigenvalues with numpy's result
 	evalue_diff = pd.DataFrame(np.nan, columns=["original"], index=range(n))
@@ -107,8 +113,11 @@ if __name__ == "__main__":
 
 		end = time.clock()
 		#print(eigenvalue_list_extracredit)
-		print("When k = ", k, " it takes ",end-start, " seconds.")
+		print("When k = ", k, " it takes ",end-start, " seconds. (CPU time)")
 	evalue_diff.to_csv("differences.csv")
+	print("We are not printing the eigenvalues and eigenvectors in the console this time (too many).\n "
+	+ "However, in differences.csv you can see the calculated eigenvalues using different methods compared"
+	+ " against the result given by np.linalg.eigh().")
 	
 ## Question 3
 	"""
@@ -123,7 +132,7 @@ if __name__ == "__main__":
 	evector_change_df = pd.DataFrame(np.nan, index=range(ret_matrix.shape[1]),
 										columns=[ordinal(i+1) for i in range(num_evalues_toshow)])
 	
-	evector_prev = np.zeros((num_evalues_toshow,n))	
+	evector_prev = np.zeros((n,num_evalues_toshow))	
 	for t in eigenvalues_df.index:
 		if (t+2)%10 == 0:
 			print("Calculating submatrix of size:", t+2)
@@ -139,13 +148,13 @@ if __name__ == "__main__":
 		# the L2 norm of changes of leading eigenvectors
 		# min(|| v_i(current) - v_i(previous) ||_2, || v_i(current) + v_i(previous) ||)
 		# minus case
-		evector_current = np.zeros((num_evalues_toshow,n))	
-		evector_current[:num_evalues,:] = tmp_evectors
+		evector_current = np.zeros((n, num_evalues_toshow))	
+		evector_current[:,:num_evalues] = tmp_evectors
 		evector_change = evector_current - evector_prev
-		evector_change_norm = np.linalg.norm(evector_change, 2, axis=1)
+		evector_change_norm = np.linalg.norm(evector_change, 2, axis=0)
 		# plus case
 		evector_change2 = evector_current + evector_prev
-		evector_change_norm2 = np.linalg.norm(evector_change2, 2, axis=1)
+		evector_change_norm2 = np.linalg.norm(evector_change2, 2, axis=0)
 		# which is smaller?
 		evector_change_df.iloc[t, :num_evalues_toshow] = np.min([evector_change_norm,evector_change_norm2],axis=0)
 		# update eigenvectors		
@@ -153,12 +162,12 @@ if __name__ == "__main__":
 	
 	# plot eigenvalues over time
 	eigenvalues_df.plot()
-	plt.title("Top " + str(num_evalues_toshow) + " eigenvectors over time")
+	plt.title("Top " + str(num_evalues_toshow) + " eigenvalues over time")
 	plt.savefig("eigenvalues.png")
 	plt.close()
 	# zoom in the plot
 	eigenvalues_df.iloc[100:,].plot()
-	plt.title("Top " + str(num_evalues_toshow) + " eigenvectors over time (zoom)")
+	plt.title("Top " + str(num_evalues_toshow) + " eigenvalues over time (zoom)")
 	plt.savefig("eigenvalues_zoom.png")
 	plt.close()
 	
@@ -168,3 +177,4 @@ if __name__ == "__main__":
 		plt.title("Change of the calculated" + col + " eigenvector (in L2 norm) over time")
 		plt.savefig(col+"-eigenvector.png")
 		plt.close()
+	print("The evolution of eigenvalues and eigenvectors are saved as png files in the working directory.")

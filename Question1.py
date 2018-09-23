@@ -56,10 +56,14 @@ if __name__ == "__main__":
 	print("Running power method...")
 
 	start = time.clock()
-	eigenvalue_list = runpower(matrix, n, tolerance)
+	eigenvalue_list, eigenvectors = runpower(matrix, n, tolerance, return_vector=True)
 	end = time.clock()
 	
+	print('eigenvalues: (in descending order)')
 	print(eigenvalue_list)
+	print('------------------------------------')
+	print('eigenvectors: in the order of corresponding eigenvalues')
+	print(eigenvectors)
 	
-	print("Power method takes ",end-start, " seconds.")
+	print("Power method takes ",end-start, " seconds. (CPU Time)")
 	

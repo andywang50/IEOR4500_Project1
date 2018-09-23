@@ -122,7 +122,7 @@ def runpower(matrix, n, tolerance, max_num=None, return_vector=False):
 		else:
 			matrix = matrix - new_eigenvalue * np.outer(v,v)
 	if return_vector:
-		return eigenvalue_list, np.asarray(eigenvector_list)
+		return eigenvalue_list, np.asarray(eigenvector_list).T
 	else:
 		return eigenvalue_list
 def runpower_one_extracredit(matrix, n, k=1024):
