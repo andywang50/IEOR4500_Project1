@@ -59,6 +59,8 @@ if __name__ == "__main__":
 	eigenvalue_list, eigenvectors = runpower(matrix, n, tolerance, return_vector=True)
 	end = time.clock()
 	
+	print('number of eigenvalues:', len(eigenvalue_list))
+	
 	print('eigenvalues: (in descending order)')
 	print(eigenvalue_list)
 	print('------------------------------------')

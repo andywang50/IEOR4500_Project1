@@ -137,7 +137,7 @@ if __name__ == "__main__":
 		if (t+2)%10 == 0:
 			print("Calculating submatrix of size:", t+2)
 		ret_submatrix = ret_matrix.iloc[:,:t+2]
-		cov_sub = np.matmul(ret_submatrix, ret_submatrix.T) / (t+1)
+		cov_sub = np.cov(ret_submatrix)
 		tmp_evalue_arr, tmp_evectors = runpower(cov_sub, n, tolerance, num_evalues_toshow, True)
 		
 		# eigenvalues
